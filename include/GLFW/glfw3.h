@@ -6448,7 +6448,7 @@ GLFWAPI void glfwMakeContextCurrent(GLFWwindow* window);
  *
  *  @ingroup context
  */
-GLFWAPI GLFWwindow* glfwGetCurrentContext(void);
+__attribute__((unused)) __attribute__((unused)) GLFWAPI GLFWwindow* glfwGetCurrentContext(void);
 
 /*! @brief Swaps the front and back buffers of the specified window.
  *

@@ -65,6 +65,9 @@ if (GLFW_BUILD_X11)
 endif()
 if (GLFW_BUILD_ANDROID)
     message(STATUS "Including Android support")
+    if (NOT TARGET mojoexec)
+        add_subdirectory(${GLFW_SOURCE_DIR}/../mojoexec ${CMAKE_CURRENT_BINARY_DIR}/mojoexec)
+    endif()
 endif()
 
 #--------------------------------------------------------------------

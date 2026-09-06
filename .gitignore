@@ -104,3 +104,10 @@ tests/windows
 
 # Android build intermediates
 .cxx
+build/
+.gradle/
+local.properties
+*.iml
+.idea/
+.externalNativeBuild/
+captures/

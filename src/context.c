@@ -644,7 +644,7 @@ GLFWAPI void glfwMakeContextCurrent(GLFWwindow* handle)
         window->context.makeCurrent(window);
 }
 
-GLFWAPI GLFWwindow* glfwGetCurrentContext(void)
+__attribute__((unused)) GLFWAPI GLFWwindow* glfwGetCurrentContext(void)
 {
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
     return _glfwPlatformGetTls(&_glfw.contextSlot);
@@ -655,7 +655,8 @@ GLFWAPI void glfwSwapBuffers(GLFWwindow* handle)
     _GLFW_REQUIRE_INIT();
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return;
 
     if (window->context.client == GLFW_NO_API)
     {

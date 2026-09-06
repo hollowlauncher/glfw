@@ -826,6 +826,8 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
 #else
             "libGLESv1_CM.so.1",
             "libGLES_CM.so.1",
+            "libGLESv1_CM.so",
+            "libGLES_CM.so",
 #endif
             NULL
         };
@@ -844,6 +846,7 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
             "libGLESv2.so",
 #else
             "libGLESv2.so.2",
+            "libGLESv2.so",
 #endif
             NULL
         };
@@ -858,6 +861,7 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
 #else
             "libOpenGL.so.0",
             "libGL.so.1",
+            "libGL.so",
 #endif
             NULL
         };
@@ -888,7 +892,14 @@ GLFWbool _glfwCreateContextEGL(_GLFWwindow* window,
         // As a last resort try getting client handle from MojoExec
         // It might appear as a real client library
         if(!window->context.egl.client){
-            window->context.egl.client = mojoexec_acq_egl_handle();
+            if (ctxconfig->client == GLFW_OPENGL_API)
+                window->context.egl.client = mojoexec_acq_gl_handle();
+            else
+                window->context.egl.client = mojoexec_acq_gles_handle();
+
+            if (!window->context.egl.client)
+                window->context.egl.client = mojoexec_acq_egl_handle();
+
             fprintf(stderr, "acquired client handle through mojoexec : %p\n", window->context.egl.client);
         }
 #endif

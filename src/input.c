@@ -271,7 +271,8 @@ static GLFWbool parseMapping(_GLFWmapping* mapping, const char* string)
 //
 void _glfwInputKey(_GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(key >= 0 || key == GLFW_KEY_UNKNOWN);
     assert(key <= GLFW_KEY_LAST);
     assert(action == GLFW_PRESS || action == GLFW_RELEASE);
@@ -308,7 +309,8 @@ void _glfwInputKey(_GLFWwindow* window, int key, int scancode, int action, int m
 //
 void _glfwInputChar(_GLFWwindow* window, uint32_t codepoint, int mods, GLFWbool plain)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(mods == (mods & GLFW_MOD_MASK));
     assert(plain == GLFW_TRUE || plain == GLFW_FALSE);
 
@@ -374,7 +376,8 @@ void _glfwInputPreeditCandidate(_GLFWwindow* window)
 //
 void _glfwInputScroll(_GLFWwindow* window, double xoffset, double yoffset)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(isfinite(xoffset));
     assert(isfinite(yoffset));
 
@@ -386,7 +389,8 @@ void _glfwInputScroll(_GLFWwindow* window, double xoffset, double yoffset)
 //
 void _glfwInputMouseClick(_GLFWwindow* window, int button, int action, int mods)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(button >= 0);
     assert(action == GLFW_PRESS || action == GLFW_RELEASE);
     assert(mods == (mods & GLFW_MOD_MASK));
@@ -414,7 +418,8 @@ void _glfwInputMouseClick(_GLFWwindow* window, int button, int action, int mods)
 //
 void _glfwInputCursorPos(_GLFWwindow* window, double xpos, double ypos)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(isfinite(xpos));
     assert(isfinite(ypos));
 
@@ -432,7 +437,8 @@ void _glfwInputCursorPos(_GLFWwindow* window, double xpos, double ypos)
 //
 void _glfwInputCursorEnter(_GLFWwindow* window, GLFWbool entered)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(entered == GLFW_TRUE || entered == GLFW_FALSE);
 
     if (window->callbacks.cursorEnter)
@@ -443,7 +449,8 @@ void _glfwInputCursorEnter(_GLFWwindow* window, GLFWbool entered)
 //
 void _glfwInputDrop(_GLFWwindow* window, int count, const char** paths)
 {
-    assert(window != NULL);
+    if (!window)
+        return;
     assert(count > 0);
     assert(paths != NULL);
 
@@ -603,7 +610,8 @@ GLFWAPI int glfwGetInputMode(GLFWwindow* handle, int mode)
     _GLFW_REQUIRE_INIT_OR_RETURN(0);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return 0;
 
     switch (mode)
     {
@@ -632,7 +640,8 @@ GLFWAPI void glfwSetInputMode(GLFWwindow* handle, int mode, int value)
     _GLFW_REQUIRE_INIT();
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return;
 
     switch (mode)
     {
@@ -794,7 +803,8 @@ GLFWAPI int glfwGetKey(GLFWwindow* handle, int key)
     _GLFW_REQUIRE_INIT_OR_RETURN(GLFW_RELEASE);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return GLFW_RELEASE;
 
     if (key < GLFW_KEY_SPACE || key > GLFW_KEY_LAST)
     {
@@ -817,7 +827,8 @@ GLFWAPI int glfwGetMouseButton(GLFWwindow* handle, int button)
     _GLFW_REQUIRE_INIT_OR_RETURN(GLFW_RELEASE);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return GLFW_RELEASE;
 
     if (button < GLFW_MOUSE_BUTTON_1 || button > GLFW_MOUSE_BUTTON_LAST)
     {
@@ -845,7 +856,8 @@ GLFWAPI void glfwGetCursorPos(GLFWwindow* handle, double* xpos, double* ypos)
     _GLFW_REQUIRE_INIT();
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return;
 
     if (window->cursorMode == GLFW_CURSOR_DISABLED)
     {
@@ -863,7 +875,8 @@ GLFWAPI void glfwSetCursorPos(GLFWwindow* handle, double xpos, double ypos)
     _GLFW_REQUIRE_INIT();
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return;
 
     if (!isfinite(xpos) || !isfinite(ypos))
     {
@@ -992,7 +1005,8 @@ GLFWAPI void glfwSetCursor(GLFWwindow* windowHandle, GLFWcursor* cursorHandle)
 
     _GLFWwindow* window = (_GLFWwindow*) windowHandle;
     _GLFWcursor* cursor = (_GLFWcursor*) cursorHandle;
-    assert(window != NULL);
+    if (!window)
+        return;
 
     window->cursor = cursor;
 
@@ -1060,7 +1074,8 @@ GLFWAPI GLFWkeyfun glfwSetKeyCallback(GLFWwindow* handle, GLFWkeyfun cbfun)
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWkeyfun, window->callbacks.key, cbfun);
     return cbfun;
@@ -1071,7 +1086,8 @@ GLFWAPI GLFWcharfun glfwSetCharCallback(GLFWwindow* handle, GLFWcharfun cbfun)
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWcharfun, window->callbacks.character, cbfun);
     return cbfun;
@@ -1082,7 +1098,8 @@ GLFWAPI GLFWcharmodsfun glfwSetCharModsCallback(GLFWwindow* handle, GLFWcharmods
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWcharmodsfun, window->callbacks.charmods, cbfun);
     return cbfun;
@@ -1119,7 +1136,8 @@ GLFWAPI GLFWmousebuttonfun glfwSetMouseButtonCallback(GLFWwindow* handle,
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWmousebuttonfun, window->callbacks.mouseButton, cbfun);
     return cbfun;
@@ -1131,7 +1149,8 @@ GLFWAPI GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* handle,
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWcursorposfun, window->callbacks.cursorPos, cbfun);
     return cbfun;
@@ -1143,7 +1162,8 @@ GLFWAPI GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* handle,
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWcursorenterfun, window->callbacks.cursorEnter, cbfun);
     return cbfun;
@@ -1155,7 +1175,8 @@ GLFWAPI GLFWscrollfun glfwSetScrollCallback(GLFWwindow* handle,
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWscrollfun, window->callbacks.scroll, cbfun);
     return cbfun;
@@ -1166,7 +1187,8 @@ GLFWAPI GLFWdropfun glfwSetDropCallback(GLFWwindow* handle, GLFWdropfun cbfun)
     _GLFW_REQUIRE_INIT_OR_RETURN(NULL);
 
     _GLFWwindow* window = (_GLFWwindow*) handle;
-    assert(window != NULL);
+    if (!window)
+        return NULL;
 
     _GLFW_SWAP(GLFWdropfun, window->callbacks.drop, cbfun);
     return cbfun;
