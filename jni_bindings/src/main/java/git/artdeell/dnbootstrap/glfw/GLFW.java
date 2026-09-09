@@ -17,6 +17,7 @@ public class GLFW {
     }
     public interface CursorCallback {
         void onCursorUse(GLFWCursor cursor);
+        void onStandardCursorUse(int shape);
     }
     private static GrabListener mGrabListener;
     private static Runnable onInitCallback;
@@ -81,6 +82,11 @@ public class GLFW {
     @SuppressWarnings("unused") // Used from native
     private static void useCursor(GLFWCursor glfwCursor) {
         mCursorCallback.onCursorUse(glfwCursor);
+    }
+
+    @SuppressWarnings("unused") // Used from native
+    private static void useStandardCursor(int shape) {
+        mCursorCallback.onStandardCursorUse(shape);
     }
 
     @SuppressWarnings("unused") // Used from native

@@ -118,6 +118,7 @@ typedef struct _GLFWlibraryAndroid
 typedef struct _GLFWcursorAndroid
 {
     jobject cursorRef;
+    int shape;
 } _GLFWcursorAndroid;
 
 void _glfwPollMonitorsAndroid(void);

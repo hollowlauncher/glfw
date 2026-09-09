@@ -84,6 +84,7 @@ static struct {
     jmethodID method_receiveCursorPos;
     jmethodID method_loadCursor;
     jmethodID method_useCursor;
+    jmethodID method_useStandardCursor;
     jmethodID method_getClipboardString;
     jmethodID method_setClipboardString;
     jmethodID method_enableDirectGamepad;
@@ -912,6 +913,7 @@ GLFWbool _glfwCreateCursorAndroid(_GLFWcursor* cursor,
 GLFWbool _glfwCreateStandardCursorAndroid(_GLFWcursor* cursor, int shape)
 {
     cursor->android.cursorRef = NULL;
+    cursor->android.shape = shape;
     return GLFW_TRUE;
 }
 
@@ -927,8 +929,13 @@ void _glfwDestroyCursorAndroid(_GLFWcursor* cursor)
 void _glfwSetCursorAndroid(_GLFWwindow* window, _GLFWcursor* cursor)
 {
     ensure_comm_connected();
-    jobject cursorRef = cursor ? cursor->android.cursorRef : NULL;
-    (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_useCursor, cursorRef);
+    if (cursor && cursor->android.cursorRef) {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_useCursor, cursor->android.cursorRef);
+    } else if (cursor) {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_useStandardCursor, cursor->android.shape);
+    } else {
+        (*jni_tl.env)->CallStaticVoidMethod(jni_tl.env, jni.glfw_class, jni.method_useStandardCursor, 0); // 0 is usually arrow
+    }
 }
 
 static void free_old_clip() {
@@ -1444,6 +1451,7 @@ Java_git_artdeell_dnbootstrap_glfw_GLFW_initialize(JNIEnv *env, jclass clazz) {
     jni.method_receiveCursorPos = (*env)->GetStaticMethodID(env, clazz, "receiveCursorPos", "(DD)V");
     jni.method_loadCursor = (*env)->GetStaticMethodID(env, clazz, "loadCursor","(Ljava/nio/ByteBuffer;IIII)Lgit/artdeell/dnbootstrap/glfw/GLFWCursor;");
     jni.method_useCursor = (*env)->GetStaticMethodID(env, clazz, "useCursor","(Lgit/artdeell/dnbootstrap/glfw/GLFWCursor;)V");
+    jni.method_useStandardCursor = (*env)->GetStaticMethodID(env, clazz, "useStandardCursor","(I)V");
     jni.method_getClipboardString = (*env)->GetStaticMethodID(env, clazz, "getClipboardString", "()Ljava/lang/String;");
     jni.method_setClipboardString = (*env)->GetStaticMethodID(env, clazz, "setClipboardString", "(Ljava/lang/String;)V");
     jni.method_enableDirectGamepad = (*env)->GetStaticMethodID(env, clazz, "enableDirectGamepad", "(Ljava/nio/ByteBuffer;Ljava/nio/ByteBuffer;)V");
