@@ -4,7 +4,11 @@ plugins {
 
 android {
     namespace 'git.artdeell.dnbglfw'
-    compileSdk 37
+    compileSdk {
+        version = release(37) {
+            it.minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         minSdk 21
